@@ -26,6 +26,12 @@ runs.jsonl
 # Local profile override (user-private)
 profile.md
 
+# Internal working docs
+BUILD_LOG.md
+DECISIONS.md
+PLAN.md
+ROADMAP.md
+
 # Secrets
 .env
 

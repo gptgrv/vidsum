@@ -92,7 +92,7 @@ def _banner() -> None:
     console.print(
         Panel(
             Text.from_markup(
-                "[bold bright_cyan]Personalised video & audio summaries.[/]\n"
+                "[bold bright_cyan]Video summaries, written for who you are.[/]\n"
                 "[dim]Let's get you set up in under a minute.[/]"
             ),
             title=title,
@@ -115,7 +115,7 @@ BACKENDS = [
 def _choose_backend_interactive() -> str:
     console.print("[step]Step 1[/]  [prompt]Choose your LLM backend[/]\n")
 
-    for i, (key, name, desc) in enumerate(BACKENDS, 1):
+    for i, (_key, name, desc) in enumerate(BACKENDS, 1):
         num = Text(f"  [{i}] ", style="accent")
         label = Text(f"{name}", style="bold white")
         detail = Text(f"  {desc}", style="dim")
@@ -229,7 +229,7 @@ def _configure_cloud_interactive(backend: str) -> dict[str, str]:
         or default_model
     )
 
-    console.print(f"  [success]✓[/] [dim]Saved to .env[/]\n")
+    console.print("  [success]✓[/] [dim]Saved to .env[/]\n")
     return {key_name: api_key, "VIDSUM_BACKEND": backend, "VIDSUM_MODEL": model}
 
 
@@ -459,7 +459,8 @@ def show_status() -> None:
     backend = env.get("VIDSUM_BACKEND", os.environ.get("VIDSUM_BACKEND", ""))
     model = env.get("VIDSUM_MODEL", os.environ.get("VIDSUM_MODEL", ""))
     if backend:
-        console.print(f"  [success]✓[/] Backend:  [bold]{backend}[/] [dim]({model or 'default'})[/]")
+        mdl = model or "default"
+        console.print(f"  [success]✓[/] Backend:  [bold]{backend}[/] [dim]({mdl})[/]")
     else:
         console.print("  [warn]○[/] Backend:  [dim]not configured — run vidsum onboard[/]")
 

@@ -1,26 +1,23 @@
 # vidsum
 
-Personalized video summaries from your profile and watch history.
+Video summaries, written for who you are.
 
-`vidsum` is a CLI for personalized video summaries.
-
-It summarizes long-form video and audio URLs, then shapes the output around the reader: what they already know, what they care about, and what is worth expanding versus compressing.
+A doctor and an AI engineer watching the same lecture should not get the same summary. `vidsum` shapes every summary around the reader — their expertise, their interests, what they already know and what they're looking for.
 
 The repo is designed to be easy for a person or another local model to install straight from Git and call non-interactively.
 
 ## Why It Exists
 
-Most video summarizers are generic. They summarize the source, but not for the person reading it.
+Most video summarizers are generic. They compress the video, but not *for you*.
 
-`vidsum` is trying to do something more useful:
+`vidsum` does something different:
 
-- use your `profile.md` as a standing preference and expertise layer
-- optionally build that profile from your LinkedIn profile URL
-- learn from your watch history over time
-- compress the parts you already know
-- emphasize the parts you are more likely to care about
+- builds a profile from your LinkedIn (or you write one)
+- learns from your watch history over time
+- compresses what you already know
+- expands what you're more likely to care about
 
-The result should feel less like "here is what the video said" and more like "here is the version of this video that matters to you."
+The result feels less like "here is what the video said" and more like "here is the part that matters to you."
 
 ## Install
 
@@ -99,15 +96,35 @@ vidsum profile init --linkedin-url https://www.linkedin.com/in/your-handle/
 
 ## Personalization Demo
 
-Generic summarizer:
+Same video. Two readers. Same `vidsum` command.
 
-> "This talk covers AI agent orchestration, common multi-agent patterns, and lessons from real deployments."
+<table>
+<tr>
+<td colspan="2">
 
-`vidsum` for a product leader building with LLM tools:
+[![How Do Ozempic, Mounjaro & Other GLP-1 Agonists Work? — Dr. Zachary Knight & Dr. Andrew Huberman](https://img.youtube.com/vi/zRXC2pEbj5w/maxresdefault.jpg)](https://www.youtube.com/watch?v=zRXC2pEbj5w)
 
-> "The useful part of this talk is not the abstract taxonomy of agent patterns, but the operating constraints behind them: where orchestration adds leverage, where it adds latency and debugging pain, and which patterns survive contact with production."
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
 
-That difference is the product.
+**For a physician**
+
+> The clinically relevant piece is the dose escalation logic: nausea from liraglutide undergoes tachyphylaxis, which is what allowed the monthly step-ups that finally reached effective weight-loss doses. The brainstem access story is also worth noting — semaglutide reaches the NTS and area postrema specifically because those are circumventricular organs with a weakened blood-brain barrier, not because of receptor density. For patients asking about muscle loss: the 25–33% lean mass loss number is real but likely overstated as a concern if they're doing resistance training and eating adequate protein.
+
+</td>
+<td width="50%" valign="top">
+
+**For a tech industry reader**
+
+> The most interesting thing here isn't the biology — it's the discovery arc. The natural hormone (GLP-1) is useless as a drug because it degrades in 2 minutes. DPP-4 inhibitors boost it 3x, enough to treat diabetes, but nobody loses weight — which accidentally proved that natural GLP-1 doesn't control body weight. Then a peptide from Gila monster venom turned out to be a stabilised version (2-hour half-life), and from there it was pure iteration: 2 min → 2 hours → 13 hours → 7 days. The breakthrough dose came from a side effect — patients got nauseous, but the nausea faded, so they kept increasing the dose until it worked. The whole thing reads like a 40-year product development cycle where the key insights came from accidents and side effects, not from the original hypothesis.
+
+</td>
+</tr>
+</table>
+
+Same video. Completely different summaries. That's the product.
 
 ## Profile Setup
 

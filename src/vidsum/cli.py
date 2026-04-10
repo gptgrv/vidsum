@@ -52,7 +52,10 @@ def main(ctx: click.Context) -> None:
 
 
 @main.command()
-@click.option("--backend", type=click.Choice(["local", "cloud", "openai"]), help="Backend to configure.")
+@click.option(
+    "--backend", type=click.Choice(["local", "cloud", "openai"]),
+    help="Backend to configure.",
+)
 @click.option("--api-key", default=None, help="API key (stored in .env, never leaves your device).")
 @click.option("--model", default=None, help="Override the default model for the chosen backend.")
 @click.option("--linkedin-url", default=None, help="LinkedIn profile URL for personalisation.")
