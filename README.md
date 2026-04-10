@@ -30,6 +30,10 @@ cd vidsum
 uv sync
 ```
 
+`uv sync` installs the Python dependencies, including `yt-dlp` and `faster-whisper`.
+If you want local summarization, install Ollama separately, then run `vidsum onboard`.
+If you want cloud summarization, `vidsum onboard` will guide you through API key setup.
+
 For a guided first-time setup:
 
 ```bash
