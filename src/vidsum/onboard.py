@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 from rich.console import Console
+from rich.markup import escape
 from rich.panel import Panel
 from rich.text import Text
 from rich.theme import Theme
@@ -163,8 +164,9 @@ def _configure_local_interactive() -> dict[str, str]:
 
     # Check if default model is pulled
     model = DEFAULT_LOCAL_MODEL
+    console.print(f"  [dim]Recommended model: {escape(model)}[/]")
     model_input = console.input(
-        f"  [accent]▸ Model [{model}]: [/]"
+        f"  [accent]▸ Custom model override (press Enter to use {escape(model)}): [/]"
     ).strip()
     if model_input:
         model = model_input
@@ -219,9 +221,13 @@ def _configure_cloud_interactive(backend: str) -> dict[str, str]:
         console.print(f"  [err]✗[/] API key is required for {provider} backend.")
         sys.exit(1)
 
-    model = console.input(
-        f"  [accent]▸ Model [{default_model}]: [/]"
-    ).strip() or default_model
+    console.print(f"  [dim]Recommended model: {escape(default_model)}[/]")
+    model = (
+        console.input(
+            f"  [accent]▸ Custom model override (press Enter to use {escape(default_model)}): [/]"
+        ).strip()
+        or default_model
+    )
 
     console.print(f"  [success]✓[/] [dim]Saved to .env[/]\n")
     return {key_name: api_key, "VIDSUM_BACKEND": backend, "VIDSUM_MODEL": model}

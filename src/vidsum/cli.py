@@ -46,7 +46,7 @@ class _VidsumGroup(click.Group):
 @click.pass_context
 def main(ctx: click.Context) -> None:
     """vidsum — personalised video/audio summariser."""
-    load_dotenv(override=True)  # Load .env; override empty env vars (e.g. ANTHROPIC_API_KEY).
+    load_dotenv()  # Load .env without overriding explicit environment variables.
     if ctx.invoked_subcommand is None:
         click.echo(ctx.get_help())
 
