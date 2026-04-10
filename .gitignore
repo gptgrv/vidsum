@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.env
+
+# Output and cache (per DECISIONS.md)
+summaries/
+runs.jsonl
+*.mp3
+*.mp4
+*.m4a
+*.webm
+*.wav
+*.opus
+
+# Local profile override (user-private)
+profile.md
+
+# Secrets
+.env
+
+# Editor noise
+.DS_Store
+.vscode/
+.idea/
