@@ -13,7 +13,7 @@ from .observability import append_run
 from .output import render_json, render_markdown, write_markdown
 from .pipeline import PipelineResult, duration_str, run_pipeline
 
-# Exit codes (per PLAN.md agent interface contract)
+# Exit codes for the CLI contract
 EXIT_OK = 0
 EXIT_GENERIC = 1
 EXIT_BAD_URL = 2
