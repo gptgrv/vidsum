@@ -92,7 +92,7 @@ def _banner() -> None:
     console.print(
         Panel(
             Text.from_markup(
-                "[bold bright_cyan]Video summaries, written for who you are.[/]\n"
+                "[bold bright_cyan]Video summaries, personalised.[/]\n"
                 "[dim]Let's get you set up in under a minute.[/]"
             ),
             title=title,

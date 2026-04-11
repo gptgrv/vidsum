@@ -1,6 +1,6 @@
 # vidsum
 
-Video summaries, written for who you are.
+Video summaries, personalised.
 
 A doctor and an AI engineer watching the same lecture should not get the same summary. `vidsum` shapes every summary around the reader — their expertise, their interests, what they already know and what they're looking for.
 
