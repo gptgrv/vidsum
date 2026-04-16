@@ -29,6 +29,16 @@ from .config import REFINE_FINAL_MAX_TOKENS, ROLLING_SUMMARY_BUDGET, ROLLING_SUM
 from .prompts import expand_prompt, refine_chunk_prompt, summarize_prompt
 from .types import Chunk, Summary, Transcript
 
+def get_instruction(mode: str) -> str:
+    if mode == "short":
+        return "You MUST summarize this in EXACTLY 2-3 concise lines. Do NOT exceed this limit."
+    elif mode == "bullet":
+        return "You MUST output ONLY bullet points using '-' format. Do NOT write paragraphs."
+    elif mode == "detailed":
+        return "Provide a detailed, structured explanation with key insights and sections."
+    else:
+        return "Summarize the content."
+
 REFINE_USER_TEMPLATE = """\
 # Rolling summary so far
 
@@ -87,6 +97,7 @@ def summarize_single_pass(
     duration_seconds: float,
     url: str,
     quiet: bool = False,
+    mode="default",
 ) -> tuple[Summary, dict]:
     """Summarise the full transcript.
 
@@ -103,15 +114,22 @@ def summarize_single_pass(
         label = "pass 1 — draft" if use_expand else "single-pass"
         print(f"  summarize: {label} (full transcript)", file=sys.stderr, flush=True)
 
-    system = _summary_system(profile)
+    instruction = get_instruction(mode) 
+    system = instruction + "\n\n" + _summary_system(profile)
+
     user = _summary_user(
-        title=title,
-        duration_seconds=duration_seconds,
-        url=url,
-        content=transcript.full_text,
-    )
+    title=title,
+    duration_seconds=duration_seconds,
+    url=url,
+    content=instruction + "\n\n" + transcript.full_text,
+)
     result = backend.complete(system, user, max_tokens=8192)
     draft = result.text.strip()
+    if mode == "short":
+     draft = "\n".join(draft.split(". ")[:2]) + "."
+    elif mode == "bullet":
+     sentences = draft.split(". ")
+     draft = "\n".join(f"- {s.strip()}." for s in sentences if s.strip())
     total_input += result.input_tokens
     total_output += result.output_tokens
     n_calls = 1
@@ -150,6 +168,12 @@ def summarize_single_pass(
             )
     else:
         final_md = draft
+
+    if mode == "short":
+     final_md = "\n".join(final_md.split(". ")[:2]) + "."
+    elif mode == "bullet":
+     sentences = final_md.split(". ")
+     final_md = "\n".join(f"- {s.strip()}." for s in sentences if s.strip())
 
     summary = _parse_markdown_summary(final_md)
     stats = {
@@ -195,12 +219,14 @@ def summarize_refine_chain(
     duration_seconds: float,
     url: str,
     quiet: bool = False,
+    mode: str = "default",
 ) -> tuple[Summary, dict]:
     system = (
         refine_chunk_prompt()
         .replace("{profile}", profile or "(no profile available)")
         .replace("{rolling_summary_budget}", str(ROLLING_SUMMARY_BUDGET))
     )
+    instruction = get_instruction(mode)
 
     rolling = "(none yet — this is the first chunk)"
     total_input = 0
@@ -229,13 +255,13 @@ def summarize_refine_chain(
     # Final pass: turn the rolling markdown into the structured summary.
     if not quiet:
         print("  refine: final structured pass", file=sys.stderr, flush=True)
-    final_system = _summary_system(profile)
+    final_system = instruction + "\n\n" + _summary_system(profile)
     final_user = _summary_user(
-        title=title,
-        duration_seconds=duration_seconds,
-        url=url,
-        content=rolling,
-    )
+    title=title,
+    duration_seconds=duration_seconds,
+    url=url,
+    content=instruction + "\n\n" + rolling,
+)
     final_result = backend.complete(final_system, final_user, max_tokens=REFINE_FINAL_MAX_TOKENS)
     draft = final_result.text.strip()
     total_input += final_result.input_tokens

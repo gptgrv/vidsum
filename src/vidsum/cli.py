@@ -117,6 +117,12 @@ def status_cmd() -> None:
     default=None,
     help="Write summary to this path instead of stdout.",
 )
+@click.option(
+    "--mode",
+    type=click.Choice(["default", "short", "detailed", "bullet"]),
+    default="default",
+    help="Summary mode",
+)
 def summarize(
     url: str,
     cloud: bool,
@@ -128,6 +134,7 @@ def summarize(
     json_out: bool,
     quiet: bool,
     out: Path | None,
+    mode: str = "default",
 ) -> None:
     """Summarise a video, podcast, or audio URL."""
     import os
@@ -165,8 +172,16 @@ def summarize(
                 whisper_model=whisper_model,
                 fresh=fresh,
                 quiet=quiet,
+                mode=mode,
             )
-            _emit(result, json_out=json_out, out=out)
+            
+            if mode == "short":
+             print("\n".join(result.summary.tldr.split(". ")[:2]) + ".")
+            elif mode == "bullet":
+             sentences = result.summary.tldr.split(". ")
+             print("\n".join(f"- {s.strip()}." for s in sentences if s.strip()))
+            else:
+              _emit(result, json_out=json_out, out=out)
             append_run(result.run_record)
             _record_watch(result)
     except KeyboardInterrupt:

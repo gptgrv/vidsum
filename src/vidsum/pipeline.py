@@ -41,6 +41,7 @@ def run_pipeline(
     whisper_model: str = DEFAULT_WHISPER_MODEL,
     fresh: bool = False,
     quiet: bool = False,
+     mode: str = "default",
 ) -> PipelineResult:
     timings: list[StageTiming] = []
     run_id = make_run_id()
@@ -126,6 +127,7 @@ def run_pipeline(
                 duration_seconds=transcript.duration_seconds,
                 url=url,
                 quiet=quiet,
+                mode=mode,
             )
             extra["path"] = "refine-chain"
             extra["n_chunks"] = len(chunks)
