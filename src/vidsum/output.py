@@ -12,6 +12,14 @@ def render_markdown(
     summary: Summary, *, title: str, url: str, duration_str: str, backend_name: str
 ) -> str:
     lines: list[str] = []
+    mode = getattr(summary, "mode", "default")
+
+    if mode == "short":
+     return "\n".join(summary.tldr.split(". ")[:2]) + "."
+
+    elif mode == "bullet":
+     sentences = summary.tldr.split(". ")
+     return "\n".join(f"- {s.strip()}." for s in sentences if s.strip())
     lines.append(f"# {title}")
     lines.append("")
     lines.append(f"*Source:* {url}  ")
